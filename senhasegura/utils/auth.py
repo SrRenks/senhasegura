@@ -11,14 +11,13 @@ class Auth:
         self.__auth = self._setup_auth(auth_type, **auth_params)
 
     def __get_oauth1(self, **auth_params: Dict[str, str]) -> OAuth1:
-        return OAuth1(auth_params["consumer_key"], auth_params["consumer_secret"],
-                      auth_params["token_key"], auth_params["token_secret"])
+        return OAuth1(**auth_params)
 
     def __get_oauth2(self, **auth_params: Dict[str, str]) -> OAuth2Session:
         return OAuth2Session(**auth_params)
 
     def _validate_auth_params(self, auth_params: Dict[str, str]) -> Dict[str, str]:
-        valid_params = {"OAuth1": ["consumer_key", "consumer_secret", "token_key", "token_secret"],
+        valid_params = {"OAuth1": ["client_key", "client_secret", "resource_owner_key", "resource_owner_secret"],
                         "OAuth2": ["client_id", "token"]}
 
         if self.__auth_type not in valid_params:
