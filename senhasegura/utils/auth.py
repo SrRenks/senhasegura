@@ -1,7 +1,8 @@
 from requests_oauthlib import OAuth1, OAuth2Session
+from typing import Dict, Union
 
 class Auth:
-    def __init__(self, auth_type: str, **auth_params):
+    def __init__(self, auth_type: str, **auth_params: Dict[str, str]) -> None:
         self.__auth_methods = {
             "OAuth1": self.__get_oauth1,
             "OAuth2": self.__get_oauth2
@@ -9,14 +10,14 @@ class Auth:
         self.__auth_type = auth_type
         self.__auth = self._setup_auth(auth_type, **auth_params)
 
-    def __get_oauth1(self, **auth_params) -> OAuth1:
+    def __get_oauth1(self, **auth_params: Dict[str, str]) -> OAuth1:
         return OAuth1(auth_params["consumer_key"], auth_params["consumer_secret"],
                       auth_params["token_key"], auth_params["token_secret"])
 
-    def __get_oauth2(self, **auth_params) -> OAuth2Session:
+    def __get_oauth2(self, **auth_params: Dict[str, str]) -> OAuth2Session:
         return OAuth2Session(**auth_params)
 
-    def _validate_auth_params(self, auth_params):
+    def _validate_auth_params(self, auth_params: Dict[str, str]) -> Dict[str, str]:
         valid_params = {"OAuth1": ["consumer_key", "consumer_secret", "token_key", "token_secret"],
                         "OAuth2": ["client_id", "token"]}
 
@@ -40,7 +41,7 @@ class Auth:
 
         return auth_params
 
-    def _setup_auth(self, auth_type: str, **auth_params):
+    def _setup_auth(self, auth_type: str, **auth_params: Dict[str, str]) -> Union[OAuth1, OAuth2Session]:
         if auth_type not in self.__auth_methods:
             raise ValueError(f'Invalid auth type: "{auth_type}", valid types: {", ".join(self.__auth_methods.keys())}')
 

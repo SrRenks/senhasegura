@@ -1,10 +1,11 @@
 from senhasegura.utils.auth import Auth
+from typing import Dict, Union, Any
 import requests
 import re
 
 
 class A2A(Auth):
-    def __init__(self, hostname: str, auth_type: str, **auth_params) -> None:
+    def __init__(self, hostname: str, auth_type: str, **auth_params: Dict[str, str]) -> None:
         http_methods = ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"]
         self.__methods = {method: getattr(requests, method.lower()) for method in http_methods}
         self.__hostname = self.__validate_hostname(hostname)
@@ -32,7 +33,7 @@ class A2A(Auth):
             raise ValueError('invalid endpoint string: "%s"' % endpoint)
         return endpoint
 
-    def __request(self, method: str, endpoint: str, **kwargs) -> requests.Response:
+    def __request(self, method: str, endpoint: str, **kwargs: Dict[str, Any]) -> requests.Response:
         if method.upper() not in self.__methods:
             raise ValueError('Invalid HTTP method: "%s"' % method)
 
