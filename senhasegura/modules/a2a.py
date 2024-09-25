@@ -8,7 +8,7 @@ class A2A(Auth):
     def __init__(self, hostname: str, auth_type: str, **auth_params: Dict[str, str]) -> None:
         http_methods = ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"]
         self.__methods = {method: getattr(requests, method.lower()) for method in http_methods}
-        self.__hostname = self.__validate_hostname(hostname)
+        self.__hostname = self.__is_valid_hostname_string(hostname)
         super().__init__(auth_type, **auth_params)
 
         [setattr(self, method.lower(),
@@ -22,12 +22,6 @@ class A2A(Auth):
             raise ValueError('invalid hostname string: "%s"' % hostname)
         return hostname
 
-    def __validate_hostname(self, hostname: str) -> bool:
-        hostname = f"https://{self.__is_valid_hostname_string(hostname)}"
-        response = requests.head(hostname)
-        response.raise_for_status()
-        return hostname
-
     def __is_valid_endpoint_string(self, endpoint: str) -> bool:
         if not re.match( r'^(?!.*//)([a-zA-Z0-9_\-./%?&=]*)?$', endpoint):
             raise ValueError('invalid endpoint string: "%s"' % endpoint)
@@ -37,5 +31,5 @@ class A2A(Auth):
         if method.upper() not in self.__methods:
             raise ValueError('Invalid HTTP method: "%s"' % method)
 
-        url = f"{self.__hostname}/{self.__is_valid_endpoint_string(endpoint).lstrip('/')}"
+        url = f"https://{self.__hostname}/{self.__is_valid_endpoint_string(endpoint).lstrip('/')}"
         return self.__methods[method.upper()](url, auth=self._Auth__auth, **kwargs)
