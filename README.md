@@ -27,7 +27,7 @@ from senhasegura import A2A
 import json
 with open("oauth1_params.json", "r") as file:
     oauth1_params = json.loads(file.read())
-a2a = A2A("senhasegura.construtoratenda.com", "OAuth1", **oauth1_params)
+a2a = A2A("senhasegura.yourcompany.com", "OAuth1", **oauth1_params)
 ```
 **Make API Calls**: Use the instance to call API endpoints with the desired HTTP method:
 ```
@@ -50,7 +50,7 @@ with open("oauth1_params.json", "r") as file:
     oauth1_params = json.loads(file.read())
 
 # Initialize with your credentials
-a2a = A2A("senhasegura.construtoratenda.com", "OAuth1", **oauth1_params)
+a2a = A2A("senhasegura.yourcompany.com", "OAuth1", **oauth1_params)
 
 # Make a GET request
 response = a2a.get("/iso/coe/senha", params={"123": 123}, headers={"User-Agent": "example"})
